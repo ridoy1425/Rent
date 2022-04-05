@@ -1,0 +1,65 @@
+body{
+   margin: 0;
+   padding: 0;
+   background: url(../images/background.jpg); 
+   background-size: cover;
+   /* background-position: center; */
+   background-repeat: no-repeat;
+}
+.login_page{
+    height: 420px;
+    width: 360px;
+    background: rgb(33, 31, 31, .9);
+    color:#fff;
+    top: 50%;
+    left: 50%;
+    box-sizing: border-box;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    overflow: auto;
+}
+
+  img{
+    height: 150;
+    width: 150px;
+    top: 105px;
+    position: relative;
+    left: calc(50% - 80px);
+    z-index: 1;
+}
+.login_form{
+    margin:20px;
+    margin-top: 40px;
+}
+
+.nav_bar .nav .nav-item .active {
+    color: #fff;
+    border-bottom: 5px solid #FFB204;
+}
+
+.nav_bar .nav .nav-item .nav-link {
+    color: #fff;
+    /*background-color:*/
+}
+
+.tab-content{
+    margin-top:20px;
+}
+
+/* scroll style */
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+  }  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: black; 
+  }   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
