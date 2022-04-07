@@ -3,13 +3,14 @@ body{
    padding: 0;
    background: url(../images/background.jpg); 
    background-size: cover;
-   /* background-position: center; */
    background-repeat: no-repeat;
+   background-attachment: fixed;
+   background-position: center;
 }
 .login_page{
     height: 420px;
     width: 360px;
-    background: rgb(33, 31, 31, .9);
+    background: rgb(33, 31, 31, .8);
     color:#fff;
     top: 50%;
     left: 50%;
@@ -17,6 +18,7 @@ body{
     position: absolute;
     transform: translate(-50%,-50%);
     overflow: auto;
+
 }
 
   img{
