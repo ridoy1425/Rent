@@ -23,36 +23,27 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>
-                        <a href="#" class="btn btn-warning">Edit</a>
-                        <a href="#" class="btn btn-danger">Delete</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>
-                        <a href="#" class="btn btn-warning">Edit</a>
-                        <a href="#" class="btn btn-danger">Delete</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                    <td>
-                        <a href="#" class="btn btn-warning">Edit</a>
-                        <a href="#" class="btn btn-danger">Delete</a>
-                    </td>
-                  </tr>
+                  @php
+                    $i=1;
+                  @endphp
+                  @foreach($propertyList as $row)
+                    @php
+                      $propertyTypeName = \App\Models\propertyType::where(['id' => $row->propertyType])->first();
+                    @endphp
+                    <tr>
+                      <td>{{ $i }}</td>
+                      <td>{{ $row->propertyName }}</td>
+                      <td>{{ $propertyTypeName->propertyType }}</td>
+                      <td>{{ $row->location }}</td>
+                      <td>
+                          <a href="{{ route('propertyListEdit') }}" class="btn btn-warning">Edit</a>
+                          <a href="#" class="btn btn-danger">Delete</a>
+                      </td>
+                    </tr>
+                    @php
+                    $i++;
+                    @endphp
+                  @endforeach                 
                 </tbody>
               </table>
         </div>

@@ -9,7 +9,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rent-@yield('title')</title>
-
+  <link rel="icon" type="image/x-icon" href="{{ asset('ui/login_assets/images/favicon.png') }}">
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome Icons -->
@@ -35,22 +35,29 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
     </ul>
-
+      @php
+      if(Session::has('loginId'))
+        {
+            $userName = App\Models\Registration::select('last_name')->where('id',session('loginId'))->first();
+        }
+      @endphp
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <li class="dropdown nav-item mr-3">
         <div class="dropdown logout_btn">
           <a class="dropdown-toggle" href="#"  id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg"  width="30" height="30" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
               <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
             </svg>
-            Shofiq
+            @if(Session::has('loginId'))
+            {{ $userName->last_name }}
+            @endif
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenu2">
-            <li><a class="dropdown-item" href="" type="button">Log Out</a></li>
+            <li><a class="dropdown-item" href="/logout" type="button">Log Out</a></li>
           </ul>
         </div>
-    </li>
+      </li>
     </ul>
   </nav>
 </div>
@@ -85,7 +92,7 @@
           
           <li class="nav-item">
             <a href="{{ route('addProperty') }}" class="nav-link {{($route == "addProperty" )? ' active' : ''}}">
-              <i class="nav-icon far fa-image"></i>
+              <i class="nav-icon fas fa-calendar-alt"></i>
               <p>
                 Add Property
               </p>
@@ -93,7 +100,7 @@
           </li>
           <li class="nav-item">
             <a href="{{ route('propertyList') }}" class="nav-link {{($route == "propertyList" )? ' active' : ''}}">
-              <i class="nav-icon fas fa-columns"></i>
+              <i class="nav-icon fas fa-table"></i>
               <p>
                 Property List
               </p>
@@ -103,7 +110,7 @@
           <li class="nav-header">RENT PROPERTY</li>
           <li class="nav-item">
             <a href="{{ route('propertyContract') }}" class="nav-link {{($route == "propertyContract" )? ' active' : ''}}">
-              <i class="nav-icon far fa-image"></i>
+              <i class="nav-icon fas fa-edit"></i>
               <p>
                 Property Contract
               </p>
@@ -121,7 +128,7 @@
           <li class="nav-header">Rent Bill</li>
           <li class="nav-item">
             <a href="{{ route('billCollection') }}" class="nav-link {{($route == "billCollection" )? ' active' : ''}}">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon fas fa-copy"></i>
               <p>
                 Bill Collection
               </p>
@@ -186,10 +193,6 @@
 {{-- bootstarp js --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
-<!-- OPTIONAL SCRIPTS -->
-<script src="{{ asset('ui/admin_assets/plugins/chart.js/Chart.min.js') }}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('ui/admin_assets/dist/js/pages/dashboard3.js') }}"></script>
 @yield('script')
 </body>
 </html>
