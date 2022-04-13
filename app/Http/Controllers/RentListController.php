@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\PropertyContract;
 
 class RentListController extends Controller
 {
     public function index()
     {
-        return view('rentList');
+        $propertyContractData = PropertyContract::all();
+        return view('rentList')->with('propertyContractData',$propertyContractData);
     }
 }

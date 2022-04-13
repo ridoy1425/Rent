@@ -43,7 +43,7 @@ Route::middleware(['LoginCheck'])->group(function () {
     Route::post('/propertyStore',[AddPropertyController::class, 'store']);
     Route::get('/propertyListEdit',[PropertyListController::class, 'propertyListEdit'])->name('propertyListEdit');
     Route::get('/propertTypeSearch',[PropertyContractController::class, 'propertTypeSearch']);
-    Route::get('/propertContractStore',[PropertyContractController::class, 'store']);
+    Route::post('/propertContractStore',[PropertyContractController::class, 'store']);
 });  
 
 

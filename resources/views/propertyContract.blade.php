@@ -11,7 +11,29 @@
 <div class="row page-content">
     <div class="col-md-2"></div>
     <div class="col-md-8">
+        <div class="alert_message mt-5">
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul style="margin-bottom: 0rem;">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            @if (Session::has('success'))
+            <div class="alert alert-success" role="success">
+                {{ Session::get('success') }}
+            </div>
+            @endif
+            @if (Session::has('error'))
+            <div class="alert alert-danger" role="success">
+                {{ Session::get('error') }}
+            </div>
+            @endif
+        </div>
         <form action="/propertContractStore" method="post">
+            @csrf
             <div class="mb-3">
                 <label for="propertyName" class="form-label">Property Name*</label>
                 <select class="form-select" id="propertyName" name="propertyName" required>
@@ -123,12 +145,12 @@
                     <input class="btn btn-danger  float-right rounded-circle mt-4" type="button" name="remove_btn" id="remove_btn" value="x">
                     <div class="row">
                         <div class="col">
-                            <label for="advanceBill" class="form-label">Bill Name</label>
-                            <input type="text" class="form-control" id="advanceBill" name="advanceBill">
+                            <label for="otherBillName" class="form-label">Bill Name</label>
+                            <input type="text" class="form-control" id="otherBillName" name="otherBillName[]">
                         </div>
                         <div class="col">
-                            <label for="flatNumber" class="form-label">Amount</label>
-                            <input type="text" class="form-control" id="flatNumber" name="flatNumber">
+                            <label for="otherBillAmount" class="form-label">Amount</label>
+                            <input type="text" class="form-control" id="otherBillAmount" name="otherBillAmount[]">
                         </div>
                     </div>
                      </div><br>`;

@@ -20,11 +20,11 @@ class AuthCheck
 
         if($path=="login" && Session()->has('loginId'))
         {
-            return redirect('/')->with('success','you are already loged in');
+            return redirect('/');
         }
         else if($path!="login" && !Session()->has('loginId'))
         {
-            return redirect('login')->with('error','Please login first');
+            return redirect('login');
         }
         return $next($request);
     }

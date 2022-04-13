@@ -16,6 +16,7 @@ class AddPropertyController extends Controller
 
     public function store(Request $request)
     {
+        // dd('hasdioasdf');
         $input = new addProperty();
         $input->propertyName = $request->propertyName;
         $input->propertyType = $request->propertyType;

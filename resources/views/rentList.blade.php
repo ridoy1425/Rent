@@ -24,39 +24,28 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>Mark</td>
-                    <td>@mdo</td>
-                    <td>
-                        <a href="#" class="btn btn-warning">Edit</a>
-                        <a href="#" class="btn btn-danger">Delete</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>Mark</td>
-                    <td>@fat</td>
-                    <td>
-                        <a href="#" class="btn btn-warning">Edit</a>
-                        <a href="#" class="btn btn-danger">Delete</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>Mark</td>
-                    <td>@twitter</td>
-                    <td>
-                        <a href="#" class="btn btn-warning">Edit</a>
-                        <a href="#" class="btn btn-danger">Delete</a>
-                    </td>
-                  </tr>
+                  @php
+                    $i=1;
+                  @endphp
+                  @foreach($propertyContractData as $row)
+                    @php
+                      $propertyName = \App\Models\addProperty::select('propertyName')->where(['id' => $row->propertyName])->first();
+                    @endphp
+                    <tr>
+                      <td>{{ $i }}</td>
+                      <td>{{ $propertyName->propertyName }}</td>
+                      <td>{{ $row->flatNumber }}</td>
+                      <td>{{ $row->tenentName }}</td>
+                      <td>{{ $row->tenentPhone }}</td>
+                      <td>
+                          <a href="#" class="btn btn-warning">Edit</a>
+                          <a href="#" class="btn btn-danger">Delete</a>
+                      </td>
+                    </tr>
+                    @php
+                    $i++;
+                    @endphp
+                  @endforeach  
                 </tbody>
               </table>
         </div>

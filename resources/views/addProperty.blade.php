@@ -83,9 +83,15 @@
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Camera" id="securitySystem2" name="securitySystem" name="securitySystem[]">
+                    <input class="form-check-input" type="checkbox" value="Camera" id="securitySystem2" name="securitySystem[]">
                     <label class="form-check-label" for="securitySystem2">
                       CC Camera
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="none" id="noneSecurity" name="securitySystem[]">
+                    <label class="form-check-label" for="securitySystem2">
+                      None
                     </label>
                 </div>
             </div>    

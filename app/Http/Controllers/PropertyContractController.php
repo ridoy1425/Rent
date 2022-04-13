@@ -26,7 +26,7 @@ class PropertyContractController extends Controller
         return response()->json($propertyTypeName) ;
     }
 
-    public function store()
+    public function store(Request $request)
     {
         $this->validate($request,[
             'houseBill' => 'required|numeric',
@@ -36,6 +36,22 @@ class PropertyContractController extends Controller
             'advanceBill' => 'required|numeric',
             'tenentPhone' => 'required|regex:/(01)[0-9]{9}/'
             ]);
+
+        // other bill management 
+        $otherBillDetails = $request->otherBillName;
+        $otherBillArray = array();
+        if($otherBillDetails)
+        {            
+            foreach($otherBillDetails as $key=>$row)
+            {
+                $otherBillArray[] =array(
+                    "billName" => $row,
+                    "billAmount" => $request->otherBillAmount[$key]
+                );
+            }
+        }        
+
+        // insert into database
         $input = new PropertyContract();
         $input->propertyName = $request->propertyName;
         $input->houseBill = $request->houseBill;
@@ -44,7 +60,7 @@ class PropertyContractController extends Controller
         $input->utilityBill = $request->utilityBill;
         $input->advanceBill = $request->advanceBill;
         $input->flatNumber = $request->flatNumber;
-        $input->otherBill = $request->otherBill;
+        $input->otherBill = $otherBillArray;
         $input->tenentName = $request->tenentName;
         $input->tenentAddress = $request->tenentAddress;
         $input->tenentPhone = $request->tenentPhone;

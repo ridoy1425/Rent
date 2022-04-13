@@ -22,7 +22,7 @@ class CreateAddPropertiesTable extends Migration
             $table->string('numbersOfRooms',10);
             $table->string('numbersOfWashrooms',10);
             $table->string('carParking',5);
-            $table->string('securitySystem',20);
+            $table->json('securitySystem');
             $table->timestamps();
         });
     }
