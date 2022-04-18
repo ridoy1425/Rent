@@ -11,6 +11,27 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
+      <div class="alert_message mt-5">
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul style="margin-bottom: 0rem;">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+        @if (Session::has('success'))
+        <div class="alert alert-success" role="success">
+            {{ Session::get('success') }}
+        </div>
+        @endif
+        @if (Session::has('error'))
+        <div class="alert alert-danger" role="success">
+            {{ Session::get('error') }}
+        </div>
+        @endif
+    </div>
         <div class="page_content">
             <table class="table">
                 <thead>
@@ -18,46 +39,43 @@
                     <th scope="col">#</th>
                     <th scope="col">Property Name</th>
                     <th scope="col">Flat/Shop No.</th>
-                    <th scope="col">Tenent Name</th>
-                    <th scope="col">Total Payment Amount</th>
-                    <th scope="col">Due Amount</th>
+                    <th scope="col">Tenent Name</th>                    
+                    <th scope="col">Monthy Payment</th>
+                    <th scope="col">Due</th>
+                    <th scope="col">Total Payment</th>
                     <th scope="col">Payment</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>Mark</td>
-                    <td>@mdo</td>
-                    <td>5000</td>
-                    <td>
-                        <a href="#" class="btn btn-warning payment">Payment</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>Mark</td>
-                    <td>@fat</td>
-                    <td>5000</td>
-                    <td>
-                        <a href="#" class="btn btn-warning payment">Payment</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>Mark</td>
-                    <td>@twitter</td>
-                    <td>5000</td>
-                    <td>
-                        <a href="#" class="btn btn-warning payment">Payment</a>
-                    </td>
-                  </tr>
+                  @php
+                    $i=1;
+                  @endphp
+                  @foreach($colectionArray as $row)
+                    @php
+                      $contractId = $row['id'];
+                      $totalAmount = $row['amount'];
+                      $monthyAmount = $row['monthly'];
+                      $dueAmount = $row['due'];
+                      $contractData = \App\Models\PropertyContract::where(['id' => $contractId])->first();                      
+                      $propertyData = \App\Models\addProperty::where(['id' => $contractData->propertyName])->first();
+                    @endphp
+                    <tr>
+                      <th>{{ $i }}</th>
+                      <td>{{ $propertyData->propertyName }}</td>
+                      <td>{{ $contractData->flatNumber }}</td>
+                      <td>{{ $contractData->tenentName }}</td>
+                      <td>{{ $monthyAmount }}</td>
+                      <td>{{ $dueAmount }}</td>
+                      <td class="contractAmount">{{ $totalAmount }}</td>
+                      <td>
+                          <a href="#" class="btn btn-warning payment">Payment</a>
+                          <input type="hidden" value="{{$contractId}}" class="contractId">
+                      </td>
+                    </tr>
+                    @php
+                    $i++;
+                    @endphp
+                  @endforeach                 
                 </tbody>
               </table>
         </div>
@@ -72,23 +90,38 @@
           <span class="close">&times;</span>
       </div>
       <div>
-          <form id="action_btn" action="" method="post">
-              <input type="hidden" value="" name="id">
+          <form id="action_btn" action="/billPayment" method="post">
+            @csrf
+              <input type="hidden" value="" name="inputContractId" id="inputContractId">
               <div id="action"></div>
               <div class="box-body">
-                  <h5>Payment</h5>
-                  <div class="mb-3">
+                  <h4>Payment</h4>
+                  <div class="row mb-3">
+                    <div class="col">
                       <label for="total_amt" class="form-label">Total Amount</label>
-                      <input type="text" class="form-control" id="total_amt" name="total_amt" required>
-                  </div>
-                  <div class="mb-3">
+                      <input type="text" class="form-control" value="" id="total_amt" name="total_amt" required>
+                    </div>
+                    <div class="col">
                       <label for="pay_amt" class="form-label">Payment Amount</label>
-                      <input type="text" class="form-control" id="pay_amt" name="pay_amt" required>
-                  </div>
-                  <div class="mb-3">
+                      <input type="text" class="form-control" value="" id="pay_amt" name="pay_amt" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
                       <label for="due_amt" class="form-label">Due Amount</label>
-                      <input type="text" class="form-control" id="due_amt" name="due_amt" required>
+                      <input type="text" class="form-control" value="" id="dueAmount" name="dueAmount" required>
                   </div>
+                  @php 
+                    $month = date('m');
+                    $day = date('d');
+                    $year = date('Y');
+                    $today = $year . '-' . $month . '-' . $day;
+                  @endphp
+                  <div class="col">
+                    <label for="pay_date" class="form-label">Payment Date</label>
+                    <input type="date" value="<?php echo $today; ?>" class="form-control" id="paymentDate" name="paymentDate" required>
+                  </div>
+              </div>
               </div><!-- /.box-body -->
               <div class="form-footer">
                   <div class="row">
@@ -111,12 +144,38 @@
 <script>
   $(document).ready(function(){
     $('.payment').click(function(){
+      var contractId = $(this).closest("tr")
+                       .find(".contractId")
+                       .val();
+      var contractAmount = $(this).closest("tr")
+                        .find(".contractAmount")
+                        .text();                 
       document.querySelector('#reject_modal').style.display = 'block';
+      $("#inputContractId").val(contractId);
+      $("#total_amt").val(contractAmount);
+    });
+
+    $('#dueAmount').click(function(){
+      var due_amt = 0;
+      var total_amt =$('#total_amt').val() ;
+      var pay_amt =$('#pay_amt').val();
+      if(pay_amt)
+      {
+        due_amt = total_amt-pay_amt;
+        $("#dueAmount").val(due_amt);
+      }
+      else{
+        alert("insert the payment amount");
+      }     
+      
     });
 
     $('.close').on('click', function () {
         document.querySelector('#reject_modal').style.display = 'none';
+        $("form")[0].reset();
     });
   });
+
+
 </script>
 @endsection

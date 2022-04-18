@@ -10,7 +10,7 @@ class AddPropertyController extends Controller
 {
     public function index()
     {
-        $propertyType = propertyType::all();
+        $propertyType = propertyType::orderBy('id')->get();
         return view('addProperty')->with('propertyType',$propertyType);
     }
 

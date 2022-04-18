@@ -39,11 +39,17 @@ Route::middleware(['LoginCheck'])->group(function () {
     Route::get('/propertyList',[PropertyListController::class, 'index'])->name('propertyList');
     Route::get('/propertyContract',[PropertyContractController::class, 'index'])->name('propertyContract');
     Route::get('/rentList',[RentListController::class, 'index'])->name('rentList');
+    Route::get('/rentListEdit/{id}',[RentListController::class, 'rentListEdit'])->name('rentListEdit');
+    Route::post('/updateRentList/{id}',[RentListController::class, 'updateRentList']);
+    Route::get('/rentListDelete/{id}',[RentListController::class, 'rentListDelete']);
     Route::get('/billCollection',[BillCollectionController::class, 'index'])->name('billCollection');
     Route::post('/propertyStore',[AddPropertyController::class, 'store']);
-    Route::get('/propertyListEdit',[PropertyListController::class, 'propertyListEdit'])->name('propertyListEdit');
+    Route::get('/propertyEdit/{id}',[PropertyListController::class, 'propertyEdit'])->name('propertyEdit');
+    Route::post('/propertyUpdate/{id}',[PropertyListController::class, 'propertyUpdate']);
+    Route::get('/propertyDelete/{id}',[PropertyListController::class, 'propertyDelete']);
     Route::get('/propertTypeSearch',[PropertyContractController::class, 'propertTypeSearch']);
     Route::post('/propertContractStore',[PropertyContractController::class, 'store']);
+    Route::post('/billPayment',[BillCollectionController::class, 'billPayment']);
 });  
 
 

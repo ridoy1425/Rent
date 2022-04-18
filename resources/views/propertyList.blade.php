@@ -11,6 +11,27 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
+        <div class="alert_message mt-5">
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul style="margin-bottom: 0rem;">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            @if (Session::has('success'))
+            <div class="alert alert-success" role="success">
+                {{ Session::get('success') }}
+            </div>
+            @endif
+            @if (Session::has('error'))
+            <div class="alert alert-danger" role="success">
+                {{ Session::get('error') }}
+            </div>
+            @endif
+        </div>
         <div class="page_content">
             <table class="table">
                 <thead>
@@ -36,8 +57,8 @@
                       <td>{{ $propertyTypeName->propertyType }}</td>
                       <td>{{ $row->location }}</td>
                       <td>
-                          <a href="{{ route('propertyListEdit') }}" class="btn btn-warning">Edit</a>
-                          <a href="#" class="btn btn-danger">Delete</a>
+                          <a href="{{ URL('/propertyEdit',$row->id) }}" class="btn btn-warning">Edit</a>
+                          <a href="{{ URL('/propertyDelete',$row->id) }}" class="btn btn-danger">Delete</a>
                       </td>
                     </tr>
                     @php

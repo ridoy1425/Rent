@@ -11,6 +11,27 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
+        <div class="alert_message mt-5">
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul style="margin-bottom: 0rem;">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            @if (Session::has('success'))
+            <div class="alert alert-success" role="success">
+                {{ Session::get('success') }}
+            </div>
+            @endif
+            @if (Session::has('error'))
+            <div class="alert alert-danger" role="success">
+                {{ Session::get('error') }}
+            </div>
+            @endif
+        </div>
         <div class="page_content">
             <table class="table">
                 <thead>
@@ -38,8 +59,8 @@
                       <td>{{ $row->tenentName }}</td>
                       <td>{{ $row->tenentPhone }}</td>
                       <td>
-                          <a href="#" class="btn btn-warning">Edit</a>
-                          <a href="#" class="btn btn-danger">Delete</a>
+                          <a href="{{ URL('/rentListEdit/'.$row->id) }}" class="btn btn-warning">Edit</a>
+                          <a href="{{ URL('/rentListDelete/'.$row->id) }}" class="btn btn-danger">Delete</a>
                       </td>
                     </tr>
                     @php
