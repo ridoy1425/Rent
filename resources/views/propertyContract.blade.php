@@ -83,10 +83,6 @@
             </div>
             <div id="otherBill"></div>
             <div class="mb-3">
-                <label for="contractTime" class="form-label">Contractual Time</label>
-                <input type="text" class="form-control" id="contractTime" name="contractTime" required>
-            </div>
-            <div class="mb-3">
                 <label for="tenentName" class="form-label">Tenent Name*</label>
                 <input type="text" class="form-control" id="tenentName" name="tenentName" required>
             </div>

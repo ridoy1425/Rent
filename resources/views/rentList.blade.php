@@ -37,10 +37,15 @@
                 <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Property Name</th>
+                    <th scope="col">P_Name</th>
                     <th scope="col">Flat/Shop No.</th>
-                    <th scope="col">Tenent Name</th>
-                    <th scope="col">Phone Number</th>
+                    <th scope="col">HouseB</th>
+                    <th scope="col">GassB</th>
+                    <th scope="col">WaterB</th>
+                    <th scope="col">ServiceC</th>
+                    <th scope="col">Advance</th>
+                    <th scope="col">T_Name</th>
+                    <th scope="col">Phone</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -56,6 +61,11 @@
                       <td>{{ $i }}</td>
                       <td>{{ $propertyName->propertyName }}</td>
                       <td>{{ $row->flatNumber }}</td>
+                      <td>{{ $row->houseBill }}</td>
+                      <td>{{ $row->gasBill }}</td>
+                      <td>{{ $row->waterBill }}</td>
+                      <td>{{ $row->utilityBill }}</td>
+                      <td>{{ $row->advanceBill }}</td>
                       <td>{{ $row->tenentName }}</td>
                       <td>{{ $row->tenentPhone }}</td>
                       <td>

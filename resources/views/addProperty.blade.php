@@ -52,7 +52,7 @@
                 <input type="text" class="form-control" id="location" name="location" required>
             </div>
             <div class="mb-3">
-                <label for="propertySize" class="form-label">Property Size</label>
+                <label for="propertySize" class="form-label">Property Size(sft)</label>
                 <input type="text" class="form-control" id="propertySize" name="propertySize" required>
             </div>
             <div class="mb-3">

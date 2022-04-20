@@ -13,6 +13,7 @@ class PropertyListController extends Controller
     public function index()
     {
         $propertyList = addProperty::orderBy('id')->get();
+        // dd($propertyList);
         return view('propertyList')->with('propertyList',$propertyList);
     }
 
