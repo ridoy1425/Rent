@@ -44,7 +44,7 @@
                     <th scope="col">WaterB</th>
                     <th scope="col">ServiceC</th>
                     <th scope="col">Advance</th>
-                    <th scope="col">T_Name</th>
+                    <th scope="col">T_/rent-webName</th>
                     <th scope="col">Phone</th>
                     <th scope="col">Action</th>
                   </tr>

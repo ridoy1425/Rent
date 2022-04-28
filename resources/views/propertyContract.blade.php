@@ -3,6 +3,11 @@
 @section('title','property contract')
 
 @section('style')
+<style>
+    .display{
+        display:none;
+    }
+</style>
 @endsection
 
 @section('content_title', 'Property Contract')
@@ -35,54 +40,6 @@
         <form action="/propertContractStore" method="post">
             @csrf
             <div class="mb-3">
-                <label for="propertyName" class="form-label">Property Name*</label>
-                <select class="form-select" id="propertyName" name="propertyName" required>
-                <option selected disabled value="">Choose...</option>
-                @foreach ($propertyDetails as $row)
-                    <option value="{{ $row->id }}">{{ $row->propertyName }}</option>
-                @endforeach              
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="propertyType" class="form-label">Property Type*</label>
-                <input type="text" class="form-control" id="propertyType" name="propertyType" required>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <label for="houseBill" class="form-label">House Rent*</label>
-                    <input type="text" class="form-control" id="houseBill"  name="houseBill">
-                </div>
-                <div class="col">
-                    <label for="gasBill" class="form-label">Gas Bill*</label>
-                    <input type="text" class="form-control" id="gasBill"  name="gasBill">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <label for="waterBill" class="form-label">Water Bill*</label>
-                    <input type="text" class="form-control" id="waterBill"  name="waterBill">
-                </div>
-                <div class="col">
-                    <label for="utilityBill" class="form-label">Utility Bill*</label>
-                    <input type="text" class="form-control" id="utilityBill"  name="utilityBill">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <label for="advanceBill" class="form-label">Advance Bill*</label>
-                    <input type="text" class="form-control" id="advanceBill" name="advanceBill">
-                </div>
-                <div class="col">
-                    <label for="flatNumber" class="form-label">Flat Number</label>
-                    <input type="text" class="form-control" id="flatNumber" name="flatNumber">
-                </div>
-            </div>
-            <div class="mb-3">
-                <label  class="form-label">Others Bill:</label>
-                <button id="addBill" type="button" class="btn btn-warning">Add Others Bill</button>
-            </div>
-            <div id="otherBill"></div>
-            <div class="mb-3">
                 <label for="tenentName" class="form-label">Tenent Name*</label>
                 <input type="text" class="form-control" id="tenentName" name="tenentName" required>
             </div>
@@ -102,6 +59,40 @@
                 <label for="tenentNID" class="form-label">NID Card*</label>
                 <input type="file" class="form-control" id="tenentNID" name="tenentNID" required>
             </div>
+            <div class="mb-3">
+                <label for="propertyName" class="form-label">Property Name*</label>
+                <select class="form-select" id="propertyName" name="propertyName" required>
+                <option selected disabled value="">Choose...</option>
+                @foreach ($propertyDetails as $row)
+                    <option value="{{ $row->id }}">{{ $row->propertyName }}</option>
+                @endforeach              
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="propertyType" class="form-label">Property Type*</label>
+                <input type="text" class="form-control" id="propertyType" name="propertyType" required>
+            </div>
+            <div class="mb-3">
+                <label for="propertyType" class="form-label">House Rent*</label>
+                <input type="text" class="form-control" id="houseBill" name="houseBill" required>
+            </div>
+            <div class="mb-3">
+                <label for="facilities" class="form-label">Include with House Rent*</label>
+                <div id="facilitiesValue"></div>
+            </div>            
+            <div class="mb-3">
+                <label for="advanceBill" class="form-label">Advance Bill*</label>
+                <input type="text" class="form-control" id="advanceBill" name="advanceBill">
+            </div>
+            <div class="mb-3">
+                <label for="flatNumber" class="form-label">Flat Number</label>
+                <input type="text" class="form-control" id="flatNumber" name="flatNumber">
+            </div>
+            <div class="mb-3">
+                <label  class="form-label">Others Bill:</label>
+                <button id="addBill" type="button" class="btn btn-warning">Add Others Bill</button>
+            </div>
+            <div id="otherBill"></div>            
 
             <div class="d-grid gap-2 col-6 mx-auto">
                 <button class="btn btn-warning" type="submit">Submit</button>
@@ -129,10 +120,129 @@
                     },
                     success: function (data) {
                         console.log(data);
+                        console.log(data[1].facilities);
                         $("#propertyType").empty();
-                        $("#propertyType").val(data);
+                        $("#facilitiesValue").empty();
+                        $("#propertyType").val(data[0]);
+                        $.each(data[1].facilities, function (key, value) {
+                                    if(value === "Gas")
+                                    {
+                                        var facilitiesValue = `<div class="mb-3 display `+value+`">
+                                            <label for="gasBill" class="form-label">Gas Bill</label>
+                                            <input type="text" class="form-control" id="gasBill" name="gasBill">
+                                        </div>`                                            
+                                    }
+                                    else if(value === "Water"){
+                                        var facilitiesValue = `<div class="row mb-3 display `+value+`">
+                                            <div class="col">
+                                                <label for="waterIniUnit" class="form-label">Initital Unit(Water)</label>
+                                                <input type="text" class="form-control" id="waterIniUnit"  name="waterIniUnit">
+                                            </div>
+                                            <div class="col">
+                                                <label for="waterPerCost" class="form-label">Per Unit Cost</label>
+                                                <input type="text" class="form-control" id="waterPerCost"  name="waterPerCost">
+                                            </div>
+                                        </div>`
+                                    }
+                                    else if(value === "Electicity"){
+                                        var facilitiesValue = `<div class="row mb-3 display `+value+`">
+                                            <div class="col">
+                                                <label for="electicityIniUnit" class="form-label">Initital Unit(Electicity)</label>
+                                                <input type="text" class="form-control" id="electicityIniUnit"  name="electicityIniUnit">
+                                            </div>
+                                            <div class="col">
+                                                <label for="electicityPerCost" class="form-label">Per Unit Cost</label>
+                                                <input type="text" class="form-control" id="electicityPerCost"  name="electicityPerCost">
+                                            </div>
+                                        </div>` 
+                                    }
+                                    else if(value === "Elevator"){
+                                        var facilitiesValue =`<div class="mb-3 display `+value+`">
+                                            <label for="elevatorBill" class="form-label">Elevator Charge</label>
+                                            <input type="text" class="form-control" id="elevatorBill" name="elevatorBill">
+                                        </div>`
+                                    }
+                                    else if(value == "Garage"){
+                                        var facilitiesValue =`<div class="mb-3 display `+value+`">
+                                            <label for="garageCharge" class="form-label">Garage Charge</label>
+                                            <input type="text" class="form-control" id="garageCharge" name="garageCharge">
+                                        </div>`
+                                    }
+                                    else if(value == "Guard"){
+                                        var facilitiesValue =`<div class="mb-3 display `+value+`">
+                                            <label for="guardBill" class="form-label">Security Charge</label>
+                                            <input type="text" class="form-control" id="guardBill" name="guardBill">
+                                        </div>`
+                                    };
+
+                            var facilities = `<div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="1"  id="`+value+`" name="`+value+`" checked>
+                                        <label class="form-check-label" for="facilities1">
+                                            `+value+`
+                                        </label>
+                                        </div>
+                                        `+facilitiesValue;
+
+                            $('#facilitiesValue').append(facilities);
+
+                        });
                     }
                 });
+            }
+        });
+
+        // facilities works
+        $('#facilitiesValue').on('click', '#Gas', function (){
+            if($(this).prop("checked") == true){
+                $('.Gas').hide();
+            }
+            else if($(this).prop("checked") == false){
+                $('.Gas').show();
+            }
+        });
+
+        $('#facilitiesValue').on('click', '#Water', function (){
+            if($(this).prop("checked") == true){
+                $('.Water').hide();
+            }
+            else if($(this).prop("checked") == false){
+                $('.Water').show();
+            }
+        });
+
+        $('#facilitiesValue').on('click', '#Electicity', function (){
+            if($(this).prop("checked") == true){
+                $('.Electicity').hide();
+            }
+            else if($(this).prop("checked") == false){
+                $('.Electicity').show();
+            }
+        });
+
+        $('#facilitiesValue').on('click', '#Garage', function (){
+            if($(this).prop("checked") == true){
+                $('.Garage').hide();
+            }
+            else if($(this).prop("checked") == false){
+                $('.Garage').show();
+            }
+        });
+
+        $('#facilitiesValue').on('click', '#Elevator', function (){
+            if($(this).prop("checked") == true){
+                $('.Elevator').hide();
+            }
+            else if($(this).prop("checked") == false){
+                $('.Elevator').show();
+            }
+        });
+
+        $('#facilitiesValue').on('click', '#Guard', function (){
+            if($(this).prop("checked") == true){
+                $('.Guard').hide();
+            }
+            else if($(this).prop("checked") == false){
+                $('.Guard').show();
             }
         });
 

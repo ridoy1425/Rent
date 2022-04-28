@@ -19,14 +19,14 @@ class AddPropertyController extends Controller
         
         // dd('hasdioasdf');
         $input = new addProperty();
+        $input->userId = session('loginId');
         $input->propertyName = $request->propertyName;
         $input->propertyType = $request->propertyType;
         $input->location = $request->location;
         $input->propertySize = $request->propertySize;
         $input->numbersOfRooms = $request->numbersOfRooms;
         $input->numbersOfWashrooms = $request->numbersOfWashrooms;
-        $input->carParking = $request->carParking;
-        $input->securitySystem = $request->securitySystem;
+        $input->facilities = $request->facilities;
         $input->save();
 
         return redirect()->back()->with('success','Data Store Successfully');

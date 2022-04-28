@@ -130,7 +130,7 @@
             <a href="{{ route('billCollection') }}" class="nav-link {{($route == "billCollection" )? ' active' : ''}}">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Bill Collection
+                Bill Genarate
               </p>
             </a>
           </li>

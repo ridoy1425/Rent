@@ -15,14 +15,14 @@ class CreateAddPropertiesTable extends Migration
     {
         Schema::create('add_properties', function (Blueprint $table) {
             $table->id();
+            $table->string('userId',10);
             $table->string('propertyName',50);
             $table->string('propertyType',50);
             $table->string('location',255);
             $table->string('propertySize',100);
             $table->string('numbersOfRooms',10);
             $table->string('numbersOfWashrooms',10);
-            $table->string('carParking',5);
-            $table->json('securitySystem');
+            $table->json('facilities');
             $table->timestamps();
         });
     }

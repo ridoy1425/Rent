@@ -11,7 +11,7 @@ class RentListController extends Controller
 {
     public function index()
     {
-        $propertyContractData = PropertyContract::orderBy('id')->get();
+        $propertyContractData = PropertyContract::where('userId', session('loginId'))->orderBy('id')->get();
         return view('rentList')->with('propertyContractData',$propertyContractData);
     }
 

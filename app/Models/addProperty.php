@@ -11,6 +11,6 @@ class addProperty extends Model
 
     protected $guarded = [];
     protected $casts = [
-        'securitySystem'=>'array'
+        'facilities'=>'array'
     ];
 }

@@ -37,14 +37,13 @@
                 <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Property Name</th>
-                    <th scope="col">Property Type</th>
+                    <th scope="col">P_Name</th>
+                    <th scope="col">P_Type</th>
                     <th scope="col">Location</th>
                     <th scope="col">Size</th>
                     <th scope="col">Rooms</th>
-                    <th scope="col">Bathroom</th>
-                    <th scope="col">Garage</th>
-                    <th scope="col">Security</th>
+                    <th scope="col">Bathrooms</th>
+                    <th scope="col">Facilities</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -55,15 +54,7 @@
                   @foreach($propertyList as $row)
                     @php
                       $propertyTypeName = \App\Models\propertyType::where(['id' => $row->propertyType])->first();
-                      if($row->carParking == "1")
-                      {
-                        $garage = "Yes";
-                      }
-                      else
-                      {
-                        $garage = "No";
-                      }
-                      $securitySystem = implode( ", ", $row->securitySystem );
+                      $facilities = implode( ", ", $row->facilities );
                     @endphp
                     <tr>
                       <td>{{ $i }}</td>
@@ -73,8 +64,7 @@
                       <td>{{ $row->propertySize }}sft</td>
                       <td>{{ $row->numbersOfRooms }}</td>
                       <td>{{ $row->numbersOfWashrooms }}</td>
-                      <td>{{ $garage }}</td>
-                      <td>{{ $securitySystem }}</td>
+                      <td>{{ $facilities }}</td>
                       <td>
                           <a href="{{ URL('/propertyEdit',$row->id) }}" class="btn btn-warning">Edit</a>
                           <a href="{{ URL('/propertyDelete',$row->id) }}" class="btn btn-danger">Delete</a>

@@ -10,50 +10,51 @@ class BillCollectionController extends Controller
 {
     public function index()
     {
-        $contractData = PropertyContract::all();
-        $colectionArray = array();
-        if($contractData)
-        {
-            foreach($contractData as $row)
-            {
-                $totalAmount = $row->houseBill+$row->gasBill+$row->waterBill+$row->utilityBill;
-                $otherBill = $row->otherBill;
-                if($otherBill)
-                {
-                    foreach($otherBill as $value)
-                    {
-                        $totalAmount = $totalAmount + $value['billAmount'];
-                    }
+        $contractData = PropertyContract::where('userId', session('loginId'))->orderBy('id')->get();
+        // $colectionArray = array();
+        // if($contractData)
+        // {
+        //     foreach($contractData as $row)
+        //     {
+        //         $totalAmount = $row->houseBill+$row->gasBill+$row->waterBill+$row->utilityBill;
+        //         $otherBill = $row->otherBill;
+        //         if($otherBill)
+        //         {
+        //             foreach($otherBill as $value)
+        //             {
+        //                 $totalAmount = $totalAmount + $value['billAmount'];
+        //             }
                 
-                }
-                $dueAmountData = BillCollection::select('dueAmount','paymentDate')->where('propertyContractId',$row->id)->first();
+        //         }
+        //         $dueAmountData = BillCollection::select('dueAmount','paymentDate')->where('propertyContractId',$row->id)->first();
                 
-                if($dueAmountData)
-                {
-                    $paymentDate = strtotime($dueAmountData->paymentDate);
-                    $curentDate = strtotime(date('y-m-d'));
-                    $difference = abs($curentDate-$paymentDate);
-                    $months = floor($difference/60/60/24/30);
-                    $monthlyAmount = $totalAmount * $months;
-                    $dueAmount = $dueAmountData->dueAmount;
-                    $finalAmount =  $monthlyAmount + $dueAmount;
-                }
-                else
-                {
-                    $dueAmount = "0";
-                    $finalAmount = $totalAmount;
-                }
-                $totalAmountArray = array(
-                    'id' => $row->id,
-                    'amount' => $finalAmount,
-                    'monthly' => $totalAmount,
-                    'due' => $dueAmount
-                );
-            $colectionArray[] =  $totalAmountArray;
-            }
+        //         if($dueAmountData)
+        //         {
+        //             $paymentDate = strtotime($dueAmountData->paymentDate);
+        //             $curentDate = strtotime(date('y-m-d'));
+        //             $difference = abs($curentDate-$paymentDate);
+        //             $months = floor($difference/60/60/24/30);
+        //             $monthlyAmount = $totalAmount * $months;
+        //             $dueAmount = $dueAmountData->dueAmount;
+        //             $finalAmount =  $monthlyAmount + $dueAmount;
+        //         }
+        //         else
+        //         {
+        //             $dueAmount = "0";
+        //             $finalAmount = $totalAmount;
+        //         }
+        //         $totalAmountArray = array(
+        //             'id' => $row->id,
+        //             'amount' => $finalAmount,
+        //             'monthly' => $totalAmount,
+        //             'due' => $dueAmount
+        //         );
+        //     $colectionArray[] =  $totalAmountArray;
+        //     }
             
-        }
-        return view('billCollection')->with('colectionArray',$colectionArray);
+        // }
+        // dd($contractData);
+        return view('billCollection')->with('contractData',$contractData);
     }
 
     public function billPayment(Request $request)

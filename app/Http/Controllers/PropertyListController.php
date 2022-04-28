@@ -12,8 +12,7 @@ class PropertyListController extends Controller
 {
     public function index()
     {
-        $propertyList = addProperty::orderBy('id')->get();
-        // dd($propertyList);
+        $propertyList = addProperty::where('userId', session('loginId'))->orderBy('id')->get();
         return view('propertyList')->with('propertyList',$propertyList);
     }
 
@@ -27,15 +26,16 @@ class PropertyListController extends Controller
 
     public function propertyUpdate(Request $request,$id)
     {
-        $propertyData = addProperty::find($id);
+       
+        $propertyData = addProperty::find($id);        
+        $propertyData->userId = session('loginId');
         $propertyData->propertyName = $request->propertyName;
         $propertyData->propertyType = $request->propertyType;
         $propertyData->location = $request->location;
         $propertyData->propertySize = $request->propertySize;
         $propertyData->numbersOfRooms = $request->numbersOfRooms;
         $propertyData->numbersOfWashrooms = $request->numbersOfWashrooms;
-        $propertyData->carParking = $request->carParking;
-        $propertyData->securitySystem = $request->securitySystem;
+        $propertyData->facilities = $request->facilities;
         $propertyData->save();
 
         return redirect('/propertyList')->with('success','Data update successfully');
@@ -53,15 +53,9 @@ class PropertyListController extends Controller
             {
                 $collectionData->delete();
             }
-        }
-        
+        }        
         $propertyData = addProperty::find($id);
         $propertyData -> delete();
-        
-
-        
-        
-
         return redirect('/propertyList')->with('success','Data delete successfully');
     }
 }

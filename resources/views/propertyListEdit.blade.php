@@ -48,34 +48,47 @@
                 <input type="text" class="form-control" value={{ $propertyList->numbersOfWashrooms }} id="numbersOfWashrooms" name="numbersOfWashrooms" required>
             </div>
             <div class="mb-3">
-                <label for="carParking" class="form-label">Car Parking Facility:</label>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input mt-2" type="radio" name="carParking" id="carParking" value="1" <?php echo ($propertyList->carParking== '1') ?  "checked" : "" ;  ?>>
-                    <label class="form-check-label" for="inlineRadio1">Yes</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input mt-2" type="radio" name="carParking" id="carParking" value="0" <?php echo ($propertyList->carParking== '0') ?  "checked" : "" ;  ?>>
-                    <label class="form-check-label" for="inlineRadio2">No</label>
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="securitySystem" class="form-label">Security System</label>
+                <label for="facilities" class="form-label">Facilities</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Guard" name="securitySystem[]" id="securitySystem1" <?php echo (in_array("Guard", $propertyList->securitySystem)) ? "checked" : ""; ?>>
+                    <input class="form-check-input" type="checkbox" value="Gass" id="facilities1" name="facilities[]" <?php echo (in_array("Gass", $propertyList->facilities)) ? "checked" : ""; ?>>
+                    <label class="form-check-label" for="facilities1">
+                      Gas Line Connection
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Water" id="facilities2" name="facilities[]" <?php echo (in_array("Water", $propertyList->facilities)) ? "checked" : ""; ?>>
+                    <label class="form-check-label" for="facilities2">
+                      Water Line Connection
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Electicity" id="facilities3" name="facilities[]" <?php echo (in_array("Electicity", $propertyList->facilities)) ? "checked" : ""; ?>>
+                    <label class="form-check-label" for="facilities3">
+                      Electicity Line
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Elevator" id="facilities4" name="facilities[]" <?php echo (in_array("Elevator", $propertyList->facilities)) ? "checked" : ""; ?>>
+                    <label class="form-check-label" for="facilities4">
+                      Elevator
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Garage" id="facilities5" name="facilities[]" <?php echo (in_array("Garage", $propertyList->facilities)) ? "checked" : ""; ?>>
+                    <label class="form-check-label" for="facilities5">
+                      Garage
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Guard" name="securitySystem[]" id="securitySystem1" <?php echo (in_array("Guard", $propertyList->facilities)) ? "checked" : ""; ?>>
                     <label class="form-check-label" for="securitySystem1">
                     Security Guard
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Camera" name="securitySystem[]" id="securitySystem2" <?php echo (in_array("Camera", $propertyList->securitySystem)) ? "checked" : ""; ?>>
+                    <input class="form-check-input" type="checkbox" value="Camera" name="securitySystem[]" id="securitySystem2" <?php echo (in_array("Camera", $propertyList->facilities)) ? "checked" : ""; ?>>
                     <label class="form-check-label" for="securitySystem2">
                     CC Camera
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="none" name="securitySystem[]" id="none" <?php echo (in_array("none", $propertyList->securitySystem)) ? "checked" : ""; ?>>
-                    <label class="form-check-label" for="none">
-                    None
                     </label>
                 </div>
             </div>

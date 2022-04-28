@@ -64,34 +64,47 @@
                 <input type="text" class="form-control" id="NumbersOfWashrooms" name="numbersOfWashrooms" required>
             </div>
             <div class="mb-3">
-                <label for="NumbersOfWashrooms" class="form-label">Car Parking Facilicy:</label>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input mt-2" type="radio" name="carParking" id="carParking1" value="1">
-                    <label class="form-check-label" for="carParking1">Yes</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input mt-2" type="radio" name="carParking" id="carParking2" value="0">
-                    <label class="form-check-label" for="carParking2">No</label>
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="NumbersOfWashrooms" class="form-label">Security System</label>
+                <label for="facilities" class="form-label">Facilities</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Guard" id="securitySystem1" name="securitySystem[]">
-                    <label class="form-check-label" for="securitySystem1">
+                    <input class="form-check-input" type="checkbox" value="Gas" id="facilities1" name="facilities[]">
+                    <label class="form-check-label" for="facilities1">
+                      Gas Line Connection
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Water" id="facilities2" name="facilities[]">
+                    <label class="form-check-label" for="facilities2">
+                      Water Line Connection
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Electicity" id="facilities3" name="facilities[]">
+                    <label class="form-check-label" for="facilities3">
+                      Electicity Line
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Elevator" id="facilities4" name="facilities[]">
+                    <label class="form-check-label" for="facilities4">
+                      Elevator
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Garage" id="facilities5" name="facilities[]">
+                    <label class="form-check-label" for="facilities5">
+                      Garage
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Guard" id="facilities6" name="facilities[]">
+                    <label class="form-check-label" for="facilities6">
                       Security Guard
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Camera" id="securitySystem2" name="securitySystem[]">
-                    <label class="form-check-label" for="securitySystem2">
+                    <input class="form-check-input" type="checkbox" value="Camera" id="facilities7" name="facilities[]">
+                    <label class="form-check-label" for="facilities7">
                       CC Camera
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="none" id="noneSecurity" name="securitySystem[]">
-                    <label class="form-check-label" for="securitySystem2">
-                      None
                     </label>
                 </div>
             </div>    

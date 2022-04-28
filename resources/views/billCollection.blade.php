@@ -40,36 +40,37 @@
                     <th scope="col">Property Name</th>
                     <th scope="col">Flat/Shop No.</th>
                     <th scope="col">Tenent Name</th>                    
-                    <th scope="col">Monthy Payment</th>
+                    {{-- <th scope="col">Monthy Payment</th>
                     <th scope="col">Due</th>
-                    <th scope="col">Total Payment</th>
-                    <th scope="col">Payment</th>
+                    <th scope="col">Total Payment</th> --}}
+                    <th scope="col">Bill Genarate</th>
                   </tr>
                 </thead>
                 <tbody>
                   @php
                     $i=1;
                   @endphp
-                  @foreach($colectionArray as $row)
+                  @foreach($contractData as $row)
                     @php
-                      $contractId = $row['id'];
-                      $totalAmount = $row['amount'];
-                      $monthyAmount = $row['monthly'];
-                      $dueAmount = $row['due'];
-                      $contractData = \App\Models\PropertyContract::where(['id' => $contractId])->first();                      
-                      $propertyData = \App\Models\addProperty::where(['id' => $contractData->propertyName])->first();
+                      // $contractId = $row['id'];
+                      // $totalAmount = $row['amount'];
+                      // $monthyAmount = $row['monthly'];
+                      // $dueAmount = $row['due'];
+                      // $contractData = \App\Models\PropertyContract::where(['id' => $contractId])->first();  
+                      $gassBill = $row->gassBill;                    
+                      $propertyData = \App\Models\addProperty::where(['id' => $row->propertyName])->first();
                     @endphp
                     <tr>
                       <th>{{ $i }}</th>
                       <td>{{ $propertyData->propertyName }}</td>
-                      <td>{{ $contractData->flatNumber }}</td>
-                      <td>{{ $contractData->tenentName }}</td>
-                      <td>{{ $monthyAmount }}</td>
+                      <td>{{ $row->flatNumber }}</td>
+                      <td>{{ $row->tenentName }}</td>
+                      {{-- <td>{{ $monthyAmount }}</td>
                       <td>{{ $dueAmount }}</td>
-                      <td class="contractAmount">{{ $totalAmount }}</td>
+                      <td class="contractAmount">{{ $totalAmount }}</td> --}}
                       <td>
-                          <a href="#" class="btn btn-warning payment">Payment</a>
-                          <input type="hidden" value="{{$contractId}}" class="contractId">
+                          <a href="#" class="btn btn-warning payment">Action</a>
+                          <input type="hidden" value="{{$row->id}}" class="contractId">
                       </td>
                     </tr>
                     @php
@@ -152,7 +153,7 @@
                         .text();                 
       document.querySelector('#reject_modal').style.display = 'block';
       $("#inputContractId").val(contractId);
-      $("#total_amt").val(contractAmount);
+      $("#total_amt").val(gassBill);
     });
 
     $('#dueAmount').click(function(){
