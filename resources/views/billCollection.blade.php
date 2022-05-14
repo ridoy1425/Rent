@@ -56,7 +56,7 @@
                       // $totalAmount = $row['amount'];
                       // $monthyAmount = $row['monthly'];
                       // $dueAmount = $row['due'];
-                      // $contractData = \App\Models\PropertyContract::where(['id' => $contractId])->first();  
+                      // $contractData = \App\Models\PropertyContract::where(['id' => $contractId])->first(); 
                       $gassBill = $row->gassBill;                    
                       $propertyData = \App\Models\addProperty::where(['id' => $row->propertyName])->first();
                     @endphp
@@ -64,15 +64,18 @@
                       <th>{{ $i }}</th>
                       <td>{{ $propertyData->propertyName }}</td>
                       <td>{{ $row->flatNumber }}</td>
-                      <td>{{ $row->tenentName }}</td>
+                      <td>{{ $row->tenentName }}</td>                      
                       {{-- <td>{{ $monthyAmount }}</td>
                       <td>{{ $dueAmount }}</td>
                       <td class="contractAmount">{{ $totalAmount }}</td> --}}
                       <td>
                           <a href="#" class="btn btn-warning payment">Action</a>
                           <input type="hidden" value="{{$row->id}}" class="contractId">
+                          <input type="hidden" name="contractWater" class="contractWater" value="{{$row->water}}">
+                          <input type="hidden" name="contractElecticity" class="contractElecticity" value="{{$row->electicity}}">
                       </td>
                     </tr>
+                    
                     @php
                     $i++;
                     @endphp
@@ -91,38 +94,23 @@
           <span class="close">&times;</span>
       </div>
       <div>
-          <form id="action_btn" action="/billPayment" method="post">
+          <form id="action_btn" action="/billGenerate" method="post">
             @csrf
               <input type="hidden" value="" name="inputContractId" id="inputContractId">
-              <div id="action"></div>
+              {{-- <div id="action"></div> --}}
               <div class="box-body">
-                  <h4>Payment</h4>
-                  <div class="row mb-3">
-                    <div class="col">
-                      <label for="total_amt" class="form-label">Total Amount</label>
-                      <input type="text" class="form-control" value="" id="total_amt" name="total_amt" required>
-                    </div>
-                    <div class="col">
-                      <label for="pay_amt" class="form-label">Payment Amount</label>
-                      <input type="text" class="form-control" value="" id="pay_amt" name="pay_amt" required>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col">
-                      <label for="due_amt" class="form-label">Due Amount</label>
-                      <input type="text" class="form-control" value="" id="dueAmount" name="dueAmount" required>
-                  </div>
+                  <h4>Bill Genarate</h4>
+                  <div class="pUnit"></div>
                   @php 
-                    $month = date('m');
-                    $day = date('d');
-                    $year = date('Y');
-                    $today = $year . '-' . $month . '-' . $day;
+                      $month = date('m');
+                      $day = date('d');
+                      $year = date('Y');
+                      $today = $year . '-' . $month . '-' . $day;
                   @endphp
-                  <div class="col">
-                    <label for="pay_date" class="form-label">Payment Date</label>
+                  <div class="mb-3">
+                    <label for="paymentDate" class="form-label">Payment Date</label>
                     <input type="date" value="<?php echo $today; ?>" class="form-control" id="paymentDate" name="paymentDate" required>
                   </div>
-              </div>
               </div><!-- /.box-body -->
               <div class="form-footer">
                   <div class="row">
@@ -145,15 +133,29 @@
 <script>
   $(document).ready(function(){
     $('.payment').click(function(){
-      var contractId = $(this).closest("tr")
-                       .find(".contractId")
-                       .val();
-      var contractAmount = $(this).closest("tr")
-                        .find(".contractAmount")
-                        .text();                 
+      var contractId = $(this).closest("tr").find(".contractId").val();
+      var contractAmount = $(this).closest("tr").find(".contractAmount").text();
+      var water = $(this).closest("tr").find(".contractWater").val();
+      var electicity = $(this).closest("tr").find(".contractElecticity").val();
+      $(".pUnit").empty();
+      if(water != '1')
+      {
+        $(".pUnit").append(`<div class="mb-3">
+                    <label for="pUnitWater" class="form-label">Present Unit(Water)</label>
+                    <input type="text" class="form-control" id="pUnitWater" name="pUnitWater">
+                  </div>`);
+      }
+      if(electicity != '1')
+      {
+        $(".pUnit").append(`<div class="mb-3">
+                    <label for="pUnitElecticity" class="form-label">Present Unit(Electicity)</label>
+                    <input type="text" class="form-control" id="pUnitElecticity" name="pUnitElecticity">
+                  </div>`);
+      }  
       document.querySelector('#reject_modal').style.display = 'block';
       $("#inputContractId").val(contractId);
-      $("#total_amt").val(gassBill);
+      $("#total_amt").val(gassBill);      
+          
     });
 
     $('#dueAmount').click(function(){
@@ -176,7 +178,6 @@
         $("form")[0].reset();
     });
   });
-
 
 </script>
 @endsection

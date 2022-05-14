@@ -164,7 +164,7 @@
                                     }
                                     else if(value == "Garage"){
                                         var facilitiesValue =`<div class="mb-3 display `+value+`">
-                                            <label for="garageCharge" class="form-label">Garage Charge</label>
+                                            <label for="garageCharge" class="form-label">Car Parking</label>
                                             <input type="text" class="form-control" id="garageCharge" name="garageCharge">
                                         </div>`
                                     }
@@ -265,7 +265,7 @@
         });
         $("#otherBill").on('click', '#remove_btn', function () {
         $(this).parent('div').remove();
-    });
+        });
 
     });
 </script>

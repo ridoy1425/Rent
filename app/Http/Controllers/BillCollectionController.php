@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PropertyContract;
 use App\Models\BillCollection;
+use App\Models\Registration;
+use PDF;
 
 class BillCollectionController extends Controller
 {
@@ -57,24 +59,93 @@ class BillCollectionController extends Controller
         return view('billCollection')->with('contractData',$contractData);
     }
 
-    public function billPayment(Request $request)
+    public function billGenerate(Request $request)
     {
+        $electricPUnit = $request->pUnitElecticity;
+        $waterpUnit = $request->pUnitWater;
         $contractId = $request->inputContractId;
-        $billCollectionData = BillCollection::select('propertyContractId')->where('propertyContractId',$contractId)->first();
-        if($billCollectionData)
-        {
-            BillCollection::where(['propertyContractId'=>$contractId])
-                            ->update(['dueAmount' => $request->dueAmount,'totalAmount'=>$request->total_amt,'paymentDate'=>$request->paymentDate]);
-        }
-        else{
-            $input = new BillCollection();
-            $input->propertyContractId = $request->inputContractId;
-            $input->totalAmount = $request->total_amt;
-            $input->dueAmount = $request->dueAmount;
-            $input->paymentDate = $request->paymentDate;
-            $input->save();
-        }
- 
-        return redirect('/billCollection')->with('success','Payment Successfull');
+        $paymentDate = $request->paymentDate;
+        
+        // function call
+        $response = $this->totalAmount($electricPUnit,$waterpUnit,$contractId);
+        $waterBill = $response['waterBill'];
+        $electricBill = $response['electricBill'];
+        $totalAmount = $response['totalAmount'];
+        $contractData = $response['contractData'];
+        $userInfo = $response['userInfo'];
+
+        return view('invoice')->with('waterBill',$waterBill)->with('electricBill',$electricBill)->with('contractData',$contractData)
+                            ->with('totalAmount',$totalAmount)->with('userInfo',$userInfo)->with('paymentDate',$paymentDate);
+                            // ->with('electricPUnit',$electricPUnit)->with('waterpUnit',$waterpUnit)->with('contractId',$contractId);
     }
+
+    public function pdfDownload(Request $request)
+    {
+        $waterBill = $request->waterBill;
+        $electricBill = $request->electricBill;
+        $contractData = $request->contractData;
+        $totalAmount = $request->totalAmount;
+        $userInfo = $request->userInfo;
+        $paymentDate = $request->paymentDate;
+        $data = [
+            'waterBill' => $waterBill,
+            'electricBill' => $electricBill,
+            'contractData' => $contractData,
+            'totalAmount' => $totalAmount,
+            'userInfo' => $userInfo,
+            'paymentDate' => $paymentDate
+        ];
+        
+        $pdf = PDF::loadView('pdfgenarator',$data);
+	    return $pdf->stream('Rent.pdf');
+    }
+
+    function totalAmount($electricPUnit,$waterpUnit,$contractId)
+    {
+        // dd($contractId)    ; 
+        $userInfo = Registration::where('id',session('loginId'))->first();
+        $contractData = PropertyContract::where('id',$contractId)->where('userId',session('loginId'))->first();  
+        
+        if($contractData)
+        {
+            $totalAmount = 0;
+            $waterBill = 0;
+            $electricBill = 0;
+            // calculate water bill
+            if($contractData->water != '1')
+            {
+                $waterIniUnit = $contractData->waterIniUnit;
+                $waterUnitCost = $contractData->waterPerCost;
+                $waterBill = ($waterpUnit - $waterIniUnit) * $waterUnitCost;
+                $totalAmount += $waterBill;
+            }            
+            // calculate electric bill
+            if($contractData->electicity != '1')
+            {
+                $electricIniUnit = $contractData->electicityIniUnit;
+                $electricUnitCost = $contractData->electicityPerCost;
+                $electricBill = ($electricPUnit - $electricIniUnit) * $electricUnitCost;
+                $totalAmount += $electricBill;
+            }
+            $totalAmount += $contractData->houseBill+$contractData->gasBill+$contractData->elevatorBill+$contractData->garageCharge+$contractData->guardBill;
+            $otherBill = $contractData->otherBill;
+            if($otherBill)
+            {
+                foreach($otherBill as $key=>$value)
+                {
+                    $totalAmount += $value['billAmount'];
+                }
+            
+            }
+        }
+        $response['totalAmount'] = $totalAmount;
+        $response['waterBill'] = $waterBill;
+        $response['electricBill'] = $electricBill;
+        $response['contractData'] = $contractData;
+        $response['userInfo'] = $userInfo;
+
+        return $response;
+    }
+
+   
 }

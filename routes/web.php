@@ -48,8 +48,13 @@ Route::middleware(['LoginCheck'])->group(function () {
     Route::post('/propertyUpdate/{id}',[PropertyListController::class, 'propertyUpdate']);
     Route::get('/propertyDelete/{id}',[PropertyListController::class, 'propertyDelete']);
     Route::get('/propertTypeSearch',[PropertyContractController::class, 'propertTypeSearch']);
+    // Route::get('/invoice',[PropertyContractController::class, 'invoice']);
     Route::post('/propertContractStore',[PropertyContractController::class, 'store']);
-    Route::post('/billPayment',[BillCollectionController::class, 'billPayment']);
+    Route::post('/billGenerate',[BillCollectionController::class, 'billGenerate']);
+    Route::get('/pdfDownload',[BillCollectionController::class, 'pdfDownload']);
+    // Route::get('/pdfDownload', function(){
+    //     return "hi";
+    // });
 });  
 
 

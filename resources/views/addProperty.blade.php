@@ -90,9 +90,9 @@
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Garage" id="facilities5" name="facilities[]">
+                    <input class="form-check-input" type="checkbox" value="Car Parking" id="facilities5" name="facilities[]">
                     <label class="form-check-label" for="facilities5">
-                      Garage
+                        Car Parking
                     </label>
                 </div>
                 <div class="form-check">
