@@ -13,7 +13,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('ui/login_assets/images/favicon.png') }}">
   </head>
   <body>
-    <img src="{{ asset('ui/login_assets/images/login.png') }}">
+    {{-- <img src="{{ asset('ui/login_assets/images/login.png') }}"> --}}
       <div class="login_page">
             <div class="alert_message mt-3">
                 @if ($errors->any())

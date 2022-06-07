@@ -10,18 +10,20 @@ a{
 
 .content{
     /* background-color: #ffffff; */
-    padding: 20px 0 80px;
+    padding-bottom: 10px;
     
 }
-
 .top-header{ 
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1;;
 }
-.content-wrapper{
+/* .content-wrapper{
     margin-top: 60px;
+} */
+.content-header{
+    padding-top: 60px;
 }
 
 /* ........................Logout button css.......................... */

@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="{{ asset('ui/admin_assets/dist/css/adminlte.min.css') }}">
   {{-- bootstart css --}}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  {{-- datatable --}}
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.css">
   {{-- custom css --}}
   <link rel="stylesheet" href="{{ asset('ui/admin_assets/dist/css/style.css') }}">
   @yield('style')
@@ -88,49 +90,104 @@
             </a>        
           </li>
           
-          <li class="nav-header">PROPERTIES</li>
-          
-          <li class="nav-item">
-            <a href="{{ route('addProperty') }}" class="nav-link {{($route == "addProperty" )? ' active' : ''}}">
-              <i class="nav-icon fas fa-calendar-alt"></i>
+
+          <li class="nav-item {{($route == 'addProperty') || ($route == 'propertyList')? 'menu-open' : ''}}">
+            <a href="#" class="nav-link">
+              <i class="fas fa-home nav-icon"></i>
               <p>
-                Add Property
+                Properties
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('addProperty') }}" class="nav-link {{($route == "addProperty" )? ' active' : ''}}">
+                  <i class="fas fa-long-arrow-alt-right nav-icon"></i>
+                  <p>Add Property</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('propertyList') }}" class="nav-link {{($route == "propertyList" )? ' active' : ''}}">
+                  <i class="fas fa-long-arrow-alt-right nav-icon"></i>
+                  <p>Property List</p>
+                </a>
+              </li>
+            </ul>
           </li>
-          <li class="nav-item">
-            <a href="{{ route('propertyList') }}" class="nav-link {{($route == "propertyList" )? ' active' : ''}}">
-              <i class="nav-icon fas fa-table"></i>
+          <li class="nav-item {{($route == 'tenantRegisterView') || ($route == 'tenantListView')? 'menu-open' : ''}}">
+            <a href="#" class="nav-link">
+              <i class="fas fa-user nav-icon"></i>
               <p>
-                Property List
+                Tenants
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-          </li>          
-          
-          <li class="nav-header">RENT PROPERTY</li>
-          <li class="nav-item">
-            <a href="{{ route('propertyContract') }}" class="nav-link {{($route == "propertyContract" )? ' active' : ''}}">
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('tenantRegisterView') }}" class="nav-link {{($route == "tenantRegisterView" )? ' active' : ''}}">
+                  <i class="fas fa-long-arrow-alt-right nav-icon"></i>
+                  <p>Tenant Register</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('tenantListView') }}" class="nav-link {{($route == "tenantListView" )? ' active' : ''}}">
+                  <i class="fas fa-long-arrow-alt-right nav-icon"></i>
+                  <p>Tenants List</p>
+                </a>
+              </li>
+            </ul>
+          </li> 
+          <li class="nav-item {{($route == 'unitCreateView') || ($route == 'unitsList')? 'menu-open' : ''}}">
+            <a href="#" class="nav-link">
+              <i class="fas fa-laptop-house nav-icon"></i>
+              <p>
+                Property Units
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('unitCreateView') }}" class="nav-link {{($route == "unitCreateView" )? ' active' : ''}}">
+                  <i class="fas fa-long-arrow-alt-right nav-icon"></i>
+                  <p>Create Unit</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('unitsList') }}" class="nav-link {{($route == "unitsList" )? ' active' : ''}}">
+                  <i class="fas fa-long-arrow-alt-right nav-icon"></i>
+                  <p>Units List</p>
+                </a>
+              </li>
+            </ul>
+          </li>  
+          <li class="nav-item {{($route == 'propertyContract') || ($route == 'contractList')? 'menu-open' : ''}}">
+            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
               <p>
-                Property Contract
+                Contract Details
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ route('rentList') }}" class="nav-link {{($route == "rentList" )? ' active' : ''}}">
-              <i class="nav-icon fas fa-columns"></i>
-              <p>
-                Rent List
-              </p>
-            </a>
-          </li> 
-
-          <li class="nav-header">Rent Bill</li>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('propertyContract') }}" class="nav-link {{($route == "propertyContract" )? ' active' : ''}}">
+                  <i class="fas fa-long-arrow-alt-right nav-icon"></i>
+                  <p>Property Contract</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('contractList') }}" class="nav-link {{($route == "contractList" )? ' active' : ''}}">
+                  <i class="fas fa-long-arrow-alt-right nav-icon"></i>
+                  <p>Contract List</p>
+                </a>
+              </li>
+            </ul>
+          </li>      
           <li class="nav-item">
             <a href="{{ route('billCollection') }}" class="nav-link {{($route == "billCollection" )? ' active' : ''}}">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Bill Genarate
+                Payments
               </p>
             </a>
           </li>
@@ -192,6 +249,8 @@
 <script src="{{ asset('ui/admin_assets/dist/js/adminlte.js') }}"></script>
 {{-- bootstarp js --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+{{-- datatable --}}
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.js"></script>
 
 @yield('script')
 </body>

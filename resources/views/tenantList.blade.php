@@ -5,7 +5,7 @@
 @section('style')
 @endsection
 
-@section('content_title', 'Property List')
+@section('content_title', 'Tenants List')
 
 @section('main_content')
 <div class="page-content">
@@ -39,16 +39,15 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">P_Name</th>
-                            <th scope="col">P_Type</th>
-                            <th scope="col">Location</th>
-                            <th scope="col">Age</th>
-                            <th scope="col">Size(sqft)</th>
-                            <th scope="col">Rooms</th>
-                            <th scope="col">BedRooms</th>
-                            <th scope="col">Washrooms</th>
-                            <th scope="col">Belcony</th>
-                            <th scope="col">Amenities</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone No</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Nid No</th>
+                            <th scope="col">Ocupation</th>
+                            <th scope="col">Work Place</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Image</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -56,28 +55,34 @@
                         @php
                         $i=1;
                         @endphp
-                        @foreach($property as $row)
-                        @php
-                        $propertyTypeName = \App\Models\propertyType::select('propertyType')->where(['id' =>
-                        $row->propertyType])->first();
-                        $amenities = implode( ", ", $row->amenities );
-                        @endphp
+                        @foreach($tenant as $row)
                         <tr>
                             <td>{{ $i }}</td>
-                            <td>{{ $row->propertyName }}</td>
-                            <td>{{ $propertyTypeName->propertyType }}</td>
-                            <td>{{ $row->state }},{{ $row->city }}-{{ $row->postalCode }},{{ $row->country }}</td>
-                            <td>{{ $row->propertyAge }}</td>
-                            <td>{{ $row->propertySize }}</td>
-                            <td>{{ $row->rooms }}</td>
-                            <td>{{ $row->bedRooms }}</td>
-                            <td>{{ $row->washrooms }}</td>
-                            <td>{{ $row->belcony }}</td>
-                            <td>{{ $amenities }}</td>
+                            <td>{{ $row->name }}</td>
+                            <td>{{ $row->email }}</td>
+                            <td>{{ $row->phone }}</td>
+                            <td>{{ $row->address }}</td>
+                            <td>{{ $row->nidNo }}</td>
+                            <td>{{ $row->ocupation }}</td>
+                            <td>{{ $row->workPlace }}</td>
+                            @php
+                             $status = \App\Models\Contract::select('propertyName')->where(['tenantName' => $row->id])->first();
+                            @endphp 
+                            @if($status)
+                                <td><p style="padding:1px;text-align:center;" class="bg-info">Occupied</p></td>
+                            @else 
+                                <td><p style="padding:1px;text-align:center;" class="bg-danger">Vacant</p></td>
+                            @endif                            
                             <td>
-                                <a href="{{ URL('/propertyEdit',$row->id) }}" class="btn btn-warning"><i
+                                <a href="{{ asset('images/tenant'.$row->image) }}">
+                                    <img height="50px" width="100px" src="{{ asset('images/tenant/'.$row->image) }}"
+                                        alt="{{ $row->image }}">
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ URL('/tenantEdit',$row->id) }}" class="text-info" title="Edit" ><i
                                         class="fas fa-edit"></i></a>
-                                <a href="{{ URL('/propertyDelete',$row->id) }}" class="btn btn-danger"><i
+                                <a href="{{ URL('/tenantDelete',$row->id) }}" class="text-danger"  title="Delete"><i
                                         class="fas fa-trash"></i></a>
                             </td>
                         </tr>
@@ -99,6 +104,5 @@
     $(document).ready(function () {
         $('#table_id').DataTable();
     });
-
 </script>
 @endsection

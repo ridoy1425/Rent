@@ -1,6 +1,6 @@
 @extends('ui.admin_panel.master')
 
-@section('title','property contract')
+@section('title','Edit contract')
 
 @section('style')
 <style>

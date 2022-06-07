@@ -3,60 +3,106 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\PropertyContract;
+use App\Models\Contract;
 use App\Models\BillCollection;
 use App\Models\Registration;
+use App\Models\Payment;
+use App\Models\PresentUnit;
+use App\Models\Unit;
+use App\Models\PaymentMethod;
 use PDF;
-
+use Carbon\Carbon;
+use DB;
 class BillCollectionController extends Controller
 {
     public function index()
     {
-        $contractData = PropertyContract::where('userId', session('loginId'))->orderBy('id')->get();
-        // $colectionArray = array();
-        // if($contractData)
-        // {
-        //     foreach($contractData as $row)
-        //     {
-        //         $totalAmount = $row->houseBill+$row->gasBill+$row->waterBill+$row->utilityBill;
-        //         $otherBill = $row->otherBill;
-        //         if($otherBill)
-        //         {
-        //             foreach($otherBill as $value)
-        //             {
-        //                 $totalAmount = $totalAmount + $value['billAmount'];
-        //             }
-                
-        //         }
-        //         $dueAmountData = BillCollection::select('dueAmount','paymentDate')->where('propertyContractId',$row->id)->first();
-                
-        //         if($dueAmountData)
-        //         {
-        //             $paymentDate = strtotime($dueAmountData->paymentDate);
-        //             $curentDate = strtotime(date('y-m-d'));
-        //             $difference = abs($curentDate-$paymentDate);
-        //             $months = floor($difference/60/60/24/30);
-        //             $monthlyAmount = $totalAmount * $months;
-        //             $dueAmount = $dueAmountData->dueAmount;
-        //             $finalAmount =  $monthlyAmount + $dueAmount;
-        //         }
-        //         else
-        //         {
-        //             $dueAmount = "0";
-        //             $finalAmount = $totalAmount;
-        //         }
-        //         $totalAmountArray = array(
-        //             'id' => $row->id,
-        //             'amount' => $finalAmount,
-        //             'monthly' => $totalAmount,
-        //             'due' => $dueAmount
-        //         );
-        //     $colectionArray[] =  $totalAmountArray;
-        //     }
+        $contractData = Contract::where('userId', session('loginId'))->orderBy('id')->get();
+        $paymentData = Payment::where('userId', session('loginId'))->latest('id')->first();
+        $paymentMethod = PaymentMethod::all();
+        return view('payment')->with('contractData',$contractData)->with('paymentData',$paymentData)->with('paymentMethod',$paymentMethod);
+    }
+
+    public function payment(Request $request)
+    {
+        $payment = new Payment();
+        $payment->userId = session('loginId');
+        $payment->tenantName = $request->tenantName;
+        $payment->propertyName = $request->propertyName;
+        $payment->unitName = $request->unitName;
+        $payment->PaidAmount = $request->paidAmount;
+        $payment->advanceAmt = $request->advanceAmt;
+        $payment->dueAmount = $request->dueAmount;
+        $payment->method = $request->payMethod;
+        $payment->save();
+
+        return redirect('billCollection')->with('success','Payment Has Successfully');
+
+    }
+
+    public function presentUnit(Request $request)
+    {
+        $presentUnit = new PresentUnit();
+        $presentUnit->userId = session('loginId');
+        $presentUnit->tenantName = $request->tenantName;
+        $presentUnit->propertyName = $request->propertyName;
+        $presentUnit->unitName = $request->unitName;
+        $presentUnit->electricPreUnit = $request->electricPreUnit;
+        $presentUnit->waterPreUnit = $request->waterPreUnit;
+        $presentUnit->save();
+
+        $totalAmount = 0;
+        $unitData = Unit::findOrFail($request->unitName);
+        if($unitData) {
+            if($request->electricPreUnit)
+            {
+                $electricPreUnit = $request->electricPreUnit;
+                $electricIniUnit = $unitData->electricIniUnit;
+                $electricUnitCost = $unitData->electricUnitCost;
+                $electricBill = ($electricPreUnit - $electricIniUnit) * $electricUnitCost;
+                $totalAmount += $electricBill;
+
+                $unitData->electricity = 4;
+                $unitData->save();
+            }
+            if($request->waterPreUnit)
+            {
+                $waterPreUnit = $request->waterPreUnit;
+                $waterIniUnit = $unitData->waterIniUnit;
+                $waterUnitCost = $unitData->waterUnitCost;
+                $waterBill = ($waterPreUnit - $waterIniUnit) * $waterUnitCost;
+                $totalAmount += $waterBill;
+
+                $unitData->water = 4;
+                $unitData->save();
+            }
             
-        // }
-        // dd($contractData);
-        return view('billCollection')->with('contractData',$contractData);
+        }
+        // $payment = Payment::where('userId',session('loginId'))->where('tenantName',$request->tenantName)->where('propertyName',$request->propertyName)->where('unitName',$request->unitName)->first();
+       
+        $updatePayment = Payment::findOrFail($request->paymentId);
+        $totalAmount += $updatePayment->dueAmount;
+        $updatePayment->dueAmount = $totalAmount;
+        $updatePayment->save();
+
+        return redirect('billCollection')->with('success','Present Unit Insert Successfully');
+    }
+
+    public function paymentHistory(Request $request)
+    {
+        $tenant = $request->tenant;
+        $property = $request->property;
+        $unit = $request->unit;
+
+        $paymentHistory = DB::table('payments')
+                        ->join('payment_methods', 'payments.method', '=', 'payment_methods.id')->select('payments.*','payment_methods.method')
+                        ->where('payments.userId',session('loginId'))->where('payments.tenantName',$tenant)->where('payments.propertyName',$property)
+                        ->where('payments.unitName',$unit)->whereMonth('payments.created_at', date('m'))
+                        ->orderBy('payments.id','DESC')
+                        ->get();
+        // dd($paymentHistory);        
+        // return Payment::find(2)->findMethod;
+        return response()->json($paymentHistory);
     }
 
     public function billGenerate(Request $request)

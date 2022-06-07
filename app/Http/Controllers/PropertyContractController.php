@@ -3,81 +3,86 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\addProperty;
-use App\Models\propertyType;
-use App\Models\PropertyContract;
+use App\Models\Property;
+use App\Models\Unit;
+use App\Models\Tenant;
+use App\Models\Contract;
+use App\Models\Payment;
+use App\Http\Traits\Calculation;
 
 class PropertyContractController extends Controller
 {
+    use Calculation;
     public function index()
     {
-        $propertyDetails = addProperty::select('id','propertyName','facilities')->where('userId', session('loginId'))->get();
-        return view('propertyContract')->with('propertyDetails',$propertyDetails);
+        $property = Property::where('userId', session('loginId'))->get();
+        $tenant = Tenant::where('userId', session('loginId'))->get();        
+        return view('propertyContract')->with('property',$property)->with('tenant',$tenant);
     }
 
-    public function propertTypeSearch(Request $request)
+    public function unitSearch(Request $request)
     {
         $propertyId = $request->propertyId;
-        $propertyData = addProperty::select('propertyType','facilities')->where('id',$propertyId)->first();
-        $propertyTypeId = $propertyData->propertyType;
-        $propertyTypeData = propertyType::select('propertyType')->where('id',$propertyTypeId)->first();
-        $propertyTypeName = $propertyTypeData->propertyType;
-        return response()->json([$propertyTypeName,$propertyData]) ;
+        $unitName = Unit::select('id','unitName')->where('userId', session('loginId'))->where('propertyName',$propertyId)->get();
+        return response()->json($unitName);
     }
 
-    public function store(Request $request)
+    public function contractStore(Request $request)
     {
-        $this->validate($request,[
-            'houseBill' => 'required|numeric',
-            'advanceBill' => 'numeric',
-            'tenentPhone' => 'required|regex:/(01)[0-9]{9}/'
-            ]);
 
-        // other bill management 
-        $otherBillDetails = $request->otherBillName;
-        $otherBillArray = array();
-        if($otherBillDetails)
-        {            
-            foreach($otherBillDetails as $key=>$row)
+        $contract = Contract::where('userId', session('loginId'))->where('propertyName',$request->propertyName)
+                            ->where('tenantName',$request->tenantName)->where('unitName',$request->unitName)->first();
+        $payment = Payment::where('userId', session('loginId'))->where('propertyName',$request->propertyName)
+                            ->where('tenantName',$request->tenantName)->where('unitName',$request->unitName)->first();
+        if($contract)
+        {
+            return redirect()->back()->with('error','This Contract Is Already Done');
+        }
+        else
+        {
+            // image Management
+            $imageName = time().'.'.$request->document->extension();
+            $request->document->move(public_path('images/contract'),$imageName);
+            // insert into database
+            $input = new Contract();
+            $input->userId = session('loginId');
+            $input->tenantName = $request->tenantName;
+            $input->propertyName = $request->propertyName;
+            $input->hasUnit = $request->unitCreate;
+            $input->unitName = $request->unitName;
+            $input->deadline = $request->deadline;
+            $input->frequency = $request->frequency;
+            $input->document = $imageName;
+            $input->save();
+            
+            $totalAmount = $this->totalAmount();
+            
+            foreach($totalAmount as $data)
             {
-                $otherBillArray[] =array(
-                    "billName" => $row,
-                    "billAmount" => $request->otherBillAmount[$key]
-                );
+                if($data['id'] == $request->unitName or $data['id']== $request->propertyName)
+                {
+                    $amount =  $data['totalAmount'];
+                }                
             }
-        }        
+            
+            $payment = new Payment();
+            $payment->userId = session('loginId');
+            $payment->tenantName = $request->tenantName;
+            $payment->propertyName = $request->propertyName;
+            $payment->unitName = $request->unitName;
+            $payment->PaidAmount = 0;
+            $payment->advanceAmt = 0;
+            $payment->dueAmount = $amount;
+            $payment->method = 0;
+            $payment->save();
 
-        // insert into database
-        $input = new PropertyContract();
-        $input->userId = session('loginId');
-        $input->tenentName = $request->tenentName;
-        $input->tenentAddress = $request->tenentAddress;
-        $input->tenentPhone = $request->tenentPhone;
-        $input->tenentProfession = $request->tenentProfession;
-        $input->tenentNID = $request->tenentNID;
-        $input->propertyName = $request->propertyName;
-        $input->houseBill = $request->houseBill;
-        $input->gas = $request->Gas;
-        $input->water = $request->Water;
-        $input->electicity = $request->Electicity;
-        $input->elevator = $request->Elevator;
-        $input->garage = $request->Garage;
-        $input->guard = $request->Guard;
-        $input->camera = $request->Camera;
-        $input->advanceBill = $request->advanceBill;
-        $input->flatNumber = $request->flatNumber;        
-        $input->gasBill = $request->gasBill;
-        $input->waterIniUnit = $request->waterIniUnit;
-        $input->waterPerCost = $request->waterPerCost;
-        $input->electicityIniUnit = $request->electicityIniUnit;
-        $input->electicityPerCost = $request->electicityPerCost;
-        $input->elevatorBill = $request->elevatorBill;
-        $input->garageCharge = $request->garageCharge;
-        $input->guardBill = $request->guardBill;
-        $input->otherBill = $otherBillArray;
-       
-        $input->save();
+            return redirect()->back()->with('success','Contract Has Made Successfully');
+        } 
+    }
 
-        return redirect()->back()->with('success','Data Store Successfully');
+    public function contractList()
+    {
+        $contract = Contract::where('userId', session('loginId'))->orderBy('id','DESC')->get();
+        return view('contractList')->with('contract',$contract);
     }
 }
