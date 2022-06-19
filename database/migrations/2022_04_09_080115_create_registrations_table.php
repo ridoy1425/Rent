@@ -20,6 +20,7 @@ class CreateRegistrationsTable extends Migration
             $table->string('phone_number',11);
             $table->string('email',50);
             $table->string('password');
+            $table->tinyInteger('type');
             $table->timestamps();
         });
     }

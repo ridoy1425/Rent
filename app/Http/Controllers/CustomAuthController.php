@@ -22,6 +22,7 @@ class CustomAuthController extends Controller
         $input->phone_number = $request->phone_number;
         $input->email = $request->email;
         $input->password = Hash::make($request->password);
+        $input->type = $request->userType;
         $result = $input->save();
 
         if($result)

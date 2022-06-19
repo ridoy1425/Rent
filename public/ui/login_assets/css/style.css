@@ -17,21 +17,31 @@ body{
     box-sizing: border-box;
     position: absolute;
     transform: translate(-50%,-50%);
-    overflow: auto;
+    /* overflow: auto; */
 
 }
-
-  img{
-    height: 150;
-    width: 150px;
-    top: 105px;
-    position: relative;
-    left: calc(50% - 80px);
-    z-index: 1;
+.login_page .forgotPass p{
+  color: #FFB204;
+  line-height: 0;
 }
+.forgotPass p:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+.login_page .signUp p{
+  transition: 0.5s;
+}
+.signUp p:hover{
+  color: #FFB204;
+ cursor: pointer;
+}
+.login_title {
+  line-height: 0;
+}
+
 .login_form{
-    margin:20px;
-    margin-top: 40px;
+    margin:0 20px;
+    margin-top: 20px;
 }
 
 .nav_bar .nav .nav-item .active {
@@ -44,24 +54,44 @@ body{
     /*background-color:*/
 }
 
-.tab-content{
+/* .tab-content{
     margin-top:20px;
+} */
+
+/* model.................... ................*/
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 160px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-/* scroll style */
-/* width */
-::-webkit-scrollbar {
-    width: 5px;
-  }  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: black; 
-  }   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #888; 
-  }  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-  }
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 30%;
+  display: flex;
+}
+
+.close {
+  color: #aaaaaa;
+  font-size: 28px;
+  float: right;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
