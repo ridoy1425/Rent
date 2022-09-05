@@ -10,28 +10,38 @@ use Session;
 class CustomAuthController extends Controller
 {
     public function registration(Request $request){
-        $this->validate($request,[
-            'email' => 'required|email|unique:registrations',
-            'phone_number' => 'required|regex:/(01)[0-9]{9}/',
-            'password' => 'required_with:password_confirmation|same:password_confirmation'
-            ]);
 
-        $input = new Registration();
-        $input->first_name = $request->first_name;
-        $input->last_name = $request->last_name;
-        $input->phone_number = $request->phone_number;
-        $input->email = $request->email;
-        $input->password = Hash::make($request->password);
-        $input->type = $request->userType;
-        $result = $input->save();
-
-        if($result)
+        $user = Registration::where('email',$request->email)->where('type',$request->userType)->first();
+        if($user)
         {
-            return redirect('login')->with('success','Registration successfull');
+            return redirect('login')->with('error','This email already exist');
         }
-        else{
-            return redirect('login')->with('error','Something Wrong');
-        }   
+        else
+        {
+            $this->validate($request,[
+                'email' => 'required|email',
+                'phone_number' => 'required|regex:/(01)[0-9]{9}/',
+                'password' => 'required_with:password_confirmation|same:password_confirmation'
+                ]);
+    
+            $input = new Registration();
+            $input->first_name = $request->first_name;
+            $input->last_name = $request->last_name;
+            $input->phone_number = $request->phone_number;
+            $input->email = $request->email;
+            $input->password = Hash::make($request->password);
+            $input->type = $request->userType;
+            $result = $input->save();
+    
+            if($result)
+            {
+                return redirect('login')->with('success','Registration successfull');
+            }
+            else{
+                return redirect('login')->with('error','Something Wrong');
+            }
+        }
+           
     }
 
     public function userLogin(Request $request)

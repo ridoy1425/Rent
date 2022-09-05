@@ -9,6 +9,7 @@ use App\Models\Tenant;
 use App\Models\Contract;
 use App\Models\Payment;
 use App\Http\Traits\Calculation;
+use App\Models\Registration;
 
 class PropertyContractController extends Controller
 {
@@ -18,6 +19,20 @@ class PropertyContractController extends Controller
         $property = Property::where('userId', session('loginId'))->get();
         $tenant = Tenant::where('userId', session('loginId'))->get();        
         return view('propertyContract')->with('property',$property)->with('tenant',$tenant);
+    }
+    // autocomplete search
+    public function autocompleteSearch(Request $request)
+    {
+          $query = $request->get('query');
+          $filterResult = Registration::select('phone_number')->where('phone_number', 'LIKE', '%'. $query. '%')->where('type', '0')->pluck('phone_number');
+          return response()->json($filterResult);
+    }
+
+    public function tenantSearch(Request $request)
+    {
+        $query = $request->get('tenantSearch');
+        $tenantResult = Registration::where('phone_number', $query)->where('type', '0')->first();
+        return response()->json($tenantResult);
     }
 
     public function unitSearch(Request $request)

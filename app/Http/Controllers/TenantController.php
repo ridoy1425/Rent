@@ -11,7 +11,7 @@ class TenantController extends Controller
 {
     public function tenantRegisterView()
     {
-        return view('tenantRegister');
+        return view('tenant.tenantProperty');
     }
 
     public function tenantStore(Request $request)

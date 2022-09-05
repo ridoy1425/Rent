@@ -61,9 +61,11 @@ Route::middleware(['LoginCheck'])->group(function () {
     Route::get('/updateUnit/{id}',[UnitController::class, 'updateUnit'])->name('updateUnit');
     //contract--
     Route::get('/propertyContract',[PropertyContractController::class, 'index'])->name('propertyContract');
+    Route::get('/autocomplete-search', [PropertyContractController::class, 'autocompleteSearch']);
     Route::get('/unitSearch',[PropertyContractController::class, 'unitSearch']);
     Route::post('/contractStore',[PropertyContractController::class, 'contractStore']);
     Route::get('/contractList',[PropertyContractController::class, 'contractList'])->name('contractList');
+    Route::get('/tenantSearch',[PropertyContractController::class, 'tenantSearch'])->name('tenantSearch');
     //payment--
     Route::get('/billCollection',[BillCollectionController::class, 'index'])->name('billCollection');
     Route::post('/payment',[BillCollectionController::class, 'payment']);

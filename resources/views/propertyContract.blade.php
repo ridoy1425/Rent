@@ -47,18 +47,121 @@
             {{-- card-body start --}}
             <div class="card card-default">
                 <div class="card-body">
+                    {{-- search tenant --}}
                     <div class="propertyContent">
-                        <h6>Tenat Information</h6>
+                        <h6>Search Tenant</h6>
                         <div class="mb-3">
-                            <label for="tenantName" class="form-label">Select Tenant</label>
-                            <select class="form-select" id="tenantName" name="tenantName" required>
-                                <option selected disabled value="">Choose...</option>
-                                @foreach ($tenant as $row)
-                                <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                @endforeach
-                            </select>
+                            <label for="tenentSearch" class="form-label">Location Search</label>
+                            <input type="text" class="form-control" id="tenentSearch" name="tenentSearch"
+                                placeholder="Type to search the Tenent">
                         </div>
                     </div>
+                    {{-- tenant information --}}
+                    <div class="propertyContent">
+                        <h6>Tenent Information</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" id="phone" name="phone"
+                                        required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label for="image" class="form-label">Identification Document</label>
+                                            <input type="file" class="form-control" id="image" name="image"
+                                            onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img height="100px" width="180px" id="output" src=""
+                                        alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="email" name="email"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nidNo" class="form-label">National ID No</label>
+                                    <input type="text" class="form-control" id="nidNo" name="nidNo"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="address" name="address"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="propertyContent">
+                        <h6>Work Information</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="ocupation" class="form-label">Ocupation Status</label>
+                                    <select class="form-select" id="ocupation" name="ocupation" required>
+                                        <option selected disabled value="">Choose..</option>
+                                        <option value="Business">Business</option>
+                                        <option value="Service Holder">Service Holder</option>
+                                        <option value="Self Employed">Self Employed</option>
+                                        <option value="Job seeker">Job seeker</option>
+                                        <option value="Student">Student</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="workPlace" class="form-label">Work Place</label required>
+                                    <input type="text" class="form-control" id="workPlace" name="workPlace"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="propertyContent">
+                        <h6>Emergency Contact</h6>
+                        <div class="mb-3">
+                            <label for="relation" class="form-label">Relation</label>
+                            <select class="form-select" id="relation" name="relation" required>
+                                <option selected disabled value="">Choose...</option>
+                                <option value="Father">Father</option>
+                                <option value="Mother">Mother</option>
+                                <option value="Brother">Brother</option>
+                                <option value="Sister">Sister</option>
+                                <option value="Friend">Friend</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">                                
+                                <div class="mb-3">
+                                    <label for="relativeName" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="relativeName" name="relativeName"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="relativePhone" class="form-label">Phone No</label>
+                                    <input type="text" class="form-control" id="relativePhone" name="relativePhone"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- property information --}}
                     <div class="propertyContent">
                         <h6>Property Information</h6>
                         <div class="row">
@@ -89,6 +192,7 @@
                             </select>
                         </div>
                     </div>
+                    {{-- contract details --}}
                     <div class="propertyContent">
                         <h6>Contract Details</h6>
                         <div class="row">
@@ -134,6 +238,7 @@
 @endsection
 
 @section('script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
 <script>
     $(document).ready(function () {
 
@@ -170,74 +275,47 @@
             }
         });
 
-        // facilities works
-        $('#facilitiesValue').on('click', '#Gas', function () {
-            if ($(this).prop("checked") == true) {
-                $('.Gas').hide();
-            } else if ($(this).prop("checked") == false) {
-                $('.Gas').show();
+        // autocomplete search js
+        var route = "{{ url('autocomplete-search') }}";
+        $('#tenentSearch').typeahead({
+            source: function (query, process) {
+                return $.get(route, {
+                    query: query
+                }, function (data) {
+                    return process(data);
+                    console.log(data);
+                });
             }
         });
 
-        $('#facilitiesValue').on('click', '#Water', function () {
-            if ($(this).prop("checked") == true) {
-                $('.Water').hide();
-            } else if ($(this).prop("checked") == false) {
-                $('.Water').show();
-            }
-        });
+        // on change field tenant information
+        $('#tenentSearch').on('change', function () {
+            if ($(this).val()) {
+                var tenantSearch = $(this).val();
+                $.ajax({
+                    url: "{{url('tenantSearch')}}",
+                    type: 'get',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        tenantSearch: tenantSearch,
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        $("#name").empty();
+                        $("#phone").empty();
+                        $("#email").empty();
+                        $("#nidNo").empty();
+                        $("#address").empty();
+                        $.each(data, function (key, value) {
+                            $("#name").val(data['first_name']+' '+data['last_name'])
+                            $("#phone").val(data['phone_number'])
+                            $("#email").val(data['email'])
+                            $("#address").val(data['id'])
 
-        $('#facilitiesValue').on('click', '#Electicity', function () {
-            if ($(this).prop("checked") == true) {
-                $('.Electicity').hide();
-            } else if ($(this).prop("checked") == false) {
-                $('.Electicity').show();
+                        });
+                    }
+                });
             }
-        });
-
-        $('#facilitiesValue').on('click', '#Garage', function () {
-            if ($(this).prop("checked") == true) {
-                $('.Garage').hide();
-            } else if ($(this).prop("checked") == false) {
-                $('.Garage').show();
-            }
-        });
-
-        $('#facilitiesValue').on('click', '#Elevator', function () {
-            if ($(this).prop("checked") == true) {
-                $('.Elevator').hide();
-            } else if ($(this).prop("checked") == false) {
-                $('.Elevator').show();
-            }
-        });
-
-        $('#facilitiesValue').on('click', '#Guard', function () {
-            if ($(this).prop("checked") == true) {
-                $('.Guard').hide();
-            } else if ($(this).prop("checked") == false) {
-                $('.Guard').show();
-            }
-        });
-
-        // on button click other bill add option
-        var html = `<div id="moreBill">
-                    <input class="btn btn-danger  float-right rounded-circle mt-4" type="button" name="remove_btn" id="remove_btn" value="x">
-                    <div class="row">
-                        <div class="col">
-                            <label for="otherBillName" class="form-label">Bill Name</label>
-                            <input type="text" class="form-control" id="otherBillName" name="otherBillName[]">
-                        </div>
-                        <div class="col">
-                            <label for="otherBillAmount" class="form-label">Amount</label>
-                            <input type="text" class="form-control" id="otherBillAmount" name="otherBillAmount[]">
-                        </div>
-                    </div>
-                     </div><br>`;
-        $("#addBill").click(function () {
-            $("#otherBill").append(html);
-        });
-        $("#otherBill").on('click', '#remove_btn', function () {
-            $(this).parent('div').remove();
         });
 
     });
